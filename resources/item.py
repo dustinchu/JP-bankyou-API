@@ -5,18 +5,18 @@ from models.item import ItemModel
 
 class Item(Resource):
     parser = reqparse.RequestParser()
-    parser.add_argument('price',
-                        type=float,
+    parser.add_argument('body',
+                        type=str,
                         required=True,
                         help="This field cannot be left blank!"
                         )
-    parser.add_argument('store_id',
+    parser.add_argument('homes_id',
                         type=int,
                         required=True,
-                        help="Every item needs a store_id."
+                        help="Every item needs a homes_id."
                         )
-
-    @jwt_required()
+    # 先把jwt認證關了
+    # @jwt_required()
     def get(self, name):
         item = ItemModel.find_by_name(name)
         if item:
@@ -51,7 +51,7 @@ class Item(Resource):
         item = ItemModel.find_by_name(name)
 
         if item:
-            item.price = data['price']
+            item.body = data['body']
         else:
             item = ItemModel(name, **data)
 
@@ -63,3 +63,8 @@ class Item(Resource):
 class ItemList(Resource):
     def get(self):
         return {'items': list(map(lambda x: x.json(), ItemModel.query.all()))}
+
+class ItemIdList(Resource):
+
+    def get(self, homes_id):
+        return list(map(lambda x: x.json(), ItemModel.query.filter_by(homes_id=homes_id)))

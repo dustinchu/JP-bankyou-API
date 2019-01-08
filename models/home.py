@@ -1,24 +1,24 @@
 from db import db
 
 
-class StoreModel(db.Model):
-    __tablename__ = 'stores'
+class HomeModel(db.Model):
+    __tablename__ = 'homes'
 
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(80))
-
+    name = db.Column(db.String(80))
     items = db.relationship('ItemModel', lazy='dynamic')
 
-    def __init__(self, title):
-        self.title = title
+    def __init__(self, name):
+        self.name = name
+        # self.body = body
 
     def json(self):
         # return {'name': self.name, 'items': [item.json() for item in self.items.all()]}
-        return {'id': self.id,'title': self.title}
+        return {'id': self.id, 'name': self.name}
 
     @classmethod
-    def find_by_name(cls, title):
-        return cls.query.filter_by(title=title).first()
+    def find_by_name(cls, name):
+        return cls.query.filter_by(name=name).first()
 
     def save_to_db(self):
         db.session.add(self)

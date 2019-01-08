@@ -6,9 +6,10 @@ from flask_jwt import JWT
 
 from security import authenticate, identity
 from resources.user import UserRegister
-from resources.item import Item, ItemList
-from resources.store import Store, StoreList
-
+from resources.item import Item, ItemList,ItemIdList
+from resources.home import Home, HomeList
+from resources.describeItem import DescribeItem, DescribeItemList,DescribeItemIdList
+from resources.describe import Describe, DescribeList
 app = Flask(__name__)
 
 app.config['DEBUG'] = True
@@ -20,10 +21,20 @@ api = Api(app)
 
 jwt = JWT(app, authenticate, identity)  # /auth
 
-api.add_resource(Store, '/store/<string:name>')
+api.add_resource(Home, '/home/<string:name>')
+api.add_resource(HomeList, '/homes')
+
 api.add_resource(Item, '/item/<string:name>')
 api.add_resource(ItemList, '/items')
-api.add_resource(StoreList, '/stores')
+api.add_resource(ItemIdList, '/id_items/<int:homes_id>')
+
+api.add_resource(Describe, '/describe/<string:name>')
+api.add_resource(DescribeList, '/describes')
+
+
+api.add_resource(DescribeItem, '/describeItem/<string:name>')
+api.add_resource(DescribeItemList, '/describeItems')
+api.add_resource(DescribeItemIdList, '/describeItemIdList/<int:describes_id>')
 
 api.add_resource(UserRegister, '/register')
 
@@ -36,4 +47,4 @@ if __name__ == '__main__':
         def create_tables():
             db.create_all()
 
-    app.run(port=5000)
+    app.run(host='0.0.0.0', port=5000)
