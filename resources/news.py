@@ -11,10 +11,19 @@ class News(Resource):
 
     def get(self):
 
+        # Ubuntu
         url = "https://www3.nhk.or.jp/news/easy/"
-        opt = webdriver.ChromeOptions()
-        opt.set_headless()
-        driver = webdriver.Chrome(options=opt)
+        options = webdriver.ChromeOptions()
+        options.binary_location = '/app/.apt/usr/bin/google-chrome'
+        options.add_argument('--headless')
+        options.add_argument('--disable-gpu')
+        driver = webdriver.Chrome(chrome_options=options)
+
+        #local
+        # url = "https://www3.nhk.or.jp/news/easy/"
+        # opt = webdriver.ChromeOptions()
+        # opt.set_headless()
+        # driver = webdriver.Chrome(options=opt)
         driver.get(url)
         html = driver.page_source.encode('utf-8')
         soup = BeautifulSoup(html, "lxml")
