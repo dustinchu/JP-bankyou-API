@@ -1,8 +1,5 @@
 from selenium import webdriver
 from flask_restful import Resource, reqparse
-import time
-import lxml
-import json
 from bs4 import BeautifulSoup
 import unicodedata
 import datetime
