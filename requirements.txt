@@ -5,6 +5,7 @@ Flask-SQLAlchemy
 uwsgi
 psycopg2
 APScheduler
+BeautifulSoup4
 lxml
 selenium
-unicodedata
+unicodedata2
