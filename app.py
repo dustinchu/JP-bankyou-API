@@ -10,6 +10,7 @@ from resources.item import Item, ItemList,ItemIdList
 from resources.home import Home, HomeList
 from resources.describeItem import DescribeItem, DescribeItemList,DescribeItemIdList
 from resources.describe import Describe, DescribeList
+from resources.news import News
 app = Flask(__name__)
 
 app.config['DEBUG'] = True
@@ -37,6 +38,10 @@ api.add_resource(DescribeItemList, '/describeItems')
 api.add_resource(DescribeItemIdList, '/describeItemIdList/<int:describes_id>')
 
 api.add_resource(UserRegister, '/register')
+
+api.add_resource(News, '/news')
+
+
 
 if __name__ == '__main__':
     from db import db

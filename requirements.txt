@@ -4,3 +4,8 @@ Flask-JWT
 Flask-SQLAlchemy
 uwsgi
 psycopg2
+APScheduler
+BeautifulSoup
+lxml
+selenium
+unicodedata
