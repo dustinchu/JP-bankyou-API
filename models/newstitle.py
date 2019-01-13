@@ -1,8 +1,8 @@
 from db import db
 
 
-class NewsModel(db.Model):
-    __tablename__ = 'News'
+class NewsTtitleModel(db.Model):
+    __tablename__ = 'NewsTitle'
 
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date)
@@ -27,14 +27,7 @@ class NewsModel(db.Model):
     def find_by_name(cls, title):
         return cls.query.filter_by(title=title).first()#return ItemModel object!
 
-    @classmethod
-    def find_by_id(cls, title):
-        return cls.query.filter_by(title=title).first()  # return ItemModel object!
 
     def save_to_db(self):
         db.session.add(self)
-        db.session.commit()
-
-    def delete_from_db(self):
-        db.session.delete(self)
         db.session.commit()

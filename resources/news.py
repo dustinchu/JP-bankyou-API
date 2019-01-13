@@ -3,7 +3,7 @@ from flask_restful import Resource, reqparse
 from bs4 import BeautifulSoup
 import unicodedata
 import datetime
-from models.news import NewsModel
+from models.newstitle import NewsTtitleModel
 
 
 
@@ -11,7 +11,7 @@ class News(Resource):
 
     def get(self):
 
-        # Ubuntu
+        # # Ubuntu heroku使用
         url = "https://www3.nhk.or.jp/news/easy/"
         options = webdriver.ChromeOptions()
         options.binary_location = '/app/.apt/usr/bin/google-chrome'
@@ -24,6 +24,9 @@ class News(Resource):
         # opt = webdriver.ChromeOptions()
         # opt.set_headless()
         # driver = webdriver.Chrome(options=opt)
+
+
+
         driver.get(url)
         html = driver.page_source.encode('utf-8')
         soup = BeautifulSoup(html, "lxml")
@@ -150,11 +153,11 @@ class News(Resource):
 
         for title, img, time, url in zip(title, img, time, url):
 
-            if NewsModel.find_by_name(title):
+            if NewsTtitleModel.find_by_name(title):
                 print('message "An item with name already exists.', title)
             else:
 
-                news = NewsModel(date=datetime.date.today(),
+                news = NewsTtitleModel(date=datetime.date.today(),
                           title=title,
                           img=img,
                           time=time,

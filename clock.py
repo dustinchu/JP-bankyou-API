@@ -1,7 +1,7 @@
 from apscheduler.schedulers.blocking import BlockingScheduler
 from selenium import webdriver
 from bs4 import BeautifulSoup
-from models.news import NewsModel
+from models.newstitle import NewsModel
 import unicodedata
 import datetime
 

@@ -11,6 +11,7 @@ from resources.home import Home, HomeList
 from resources.describeItem import DescribeItem, DescribeItemList,DescribeItemIdList
 from resources.describe import Describe, DescribeList
 from resources.news import News
+from resources.newstitle import NewsTitleList
 app = Flask(__name__)
 
 app.config['DEBUG'] = True
@@ -40,6 +41,7 @@ api.add_resource(DescribeItemIdList, '/describeItemIdList/<int:describes_id>')
 api.add_resource(UserRegister, '/register')
 
 api.add_resource(News, '/news')
+api.add_resource(NewsTitleList, '/newstitle')
 
 
 
