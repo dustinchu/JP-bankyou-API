@@ -2,7 +2,7 @@ from db import db
 
 
 class NewsTtitleModel(db.Model):
-    __tablename__ = 'NewsTitle'
+    __tablename__ = 'newstitle'
 
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date)
