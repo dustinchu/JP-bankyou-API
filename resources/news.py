@@ -84,7 +84,7 @@ class News(Resource):
                 # 順便查內容
 
             except:
-                return {"message": "An error occurred inserting the item."}, 500
+                return {"message": "An error occurred inserting the newBody."}, 500
 
 
         return "ok"
@@ -243,7 +243,7 @@ class GetHomePageData():
                     urlList.append(url)
 
                 except:
-                    return {"message": "An error occurred inserting the item."}, 500
+                    return {"message": "An error occurred inserting the newsTitle."}, 500
 
         return urlList
 
