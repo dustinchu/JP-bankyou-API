@@ -7,4 +7,4 @@ from models.newstitle import NewsTtitleModel
 
 class NewsTitleList(Resource):
     def get(self):
-        return {'NewsTitleList': list(map(lambda x: x.json(), NewsTtitleModel.query.all()))}
+        return list(map(lambda x: x.json(), NewsTtitleModel.query.all()))

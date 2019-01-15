@@ -3,7 +3,9 @@ from flask_restful import Resource, reqparse
 from bs4 import BeautifulSoup
 import unicodedata
 import datetime
+import json
 from models.newstitle import NewsTtitleModel
+from models.newsbody import NewsBody
 
 
 
@@ -11,7 +13,7 @@ class News(Resource):
 
     def get(self):
 
-        # # Ubuntu heroku使用
+        # Ubuntu heroku使用
         url = "https://www3.nhk.or.jp/news/easy/"
         options = webdriver.ChromeOptions()
         options.binary_location = '/app/.apt/usr/bin/google-chrome'
@@ -26,25 +28,84 @@ class News(Resource):
         # driver = webdriver.Chrome(options=opt)
 
 
-
         driver.get(url)
         html = driver.page_source.encode('utf-8')
         soup = BeautifulSoup(html, "lxml")
-        #用來判斷漢字 與漢字片假名使用
-        isJp =0
-        #標題字串分隔儲存
-        titleStr=""
-        #內容字串分割儲存
-        bodyStr=""
+
+        url = GetHomePageData.getHomeHtml(soup)
 
 
-        newsJson = []
+
+        # url = "https://www3.nhk.or.jp/news/easy/k10011774101000/k10011774101000.html"
+        for pageUrl in url:
+            print("pageUrl", "https://www3.nhk.or.jp/news/easy"+pageUrl[1:])
+            rulId = pageUrl[2:].split("/", 3)
+            print("urlID==", "https://nhks-vh.akamaihd.net/i/news/easy/" + rulId[0] + ".mp4/master.m3u8")
+            opt = webdriver.ChromeOptions()
+            opt.set_headless()
+            driver = webdriver.Chrome(options=opt)
+            #將第一個.去除掉
+            driver.get("https://www3.nhk.or.jp/news/easy"+pageUrl[1:])
+            html = driver.page_source.encode('utf-8')
+            soup = BeautifulSoup(html, "lxml")
+            #字串判斷使用
+            isJp = 0
+            #寸內容
+            bodyStr = ""
+
+            for post in soup.find_all("article", "article-main"):
+                # print(post)
+                for body in post.find_all("div", "article-main__body article-body"):
+                    for bodyText in body.strings:
+                        if bodyText !="\n":
+                            # 將字串分割
+                            if Japanese.is_japanese(bodyText):
+                                # 是漢字的話漢字後面加上&
+                                bodyStr += bodyText + "&"
+                                isJp = 1
+                            else:
+                                # 如果上一筆是漢字isJp=1  結束要加上空白
+                                if isJp == 1:
+                                    isJp = 0
+                                    bodyStr += bodyText + " "
+                                # 如果isJp=0 代表前面沒漢字　不需要加空白　不=0的話 代表前面有漢字 將is存成2
+                                else:
+                                    bodyStr += bodyText + " "
+
+            print("內容===", bodyStr)
+            driver.close()
+            #將資料寫入資料庫 url ＝./XXX 沒分割過的  到時候內容用標題查得到url去串
+            newsBody = NewsBody(date=datetime.date.today(),
+                      pageUrl=pageUrl,
+                      body=bodyStr,
+                      playUrl="https://nhks-vh.akamaihd.net/i/news/easy/" + rulId[0] + ".mp4/master.m3u8")
+            try:
+                newsBody.save_to_db()
+                # 順便查內容
+
+            except:
+                return {"message": "An error occurred inserting the item."}, 500
+
+
+        return "ok"
+
+class GetHomePageData():
+    playUrl =[]
+    def getHomeHtml(soup):
+
+        # 用來判斷漢字 與漢字片假名使用
+        isJp = 0
+        # 標題字串分隔儲存
+        titleStr = ""
+        # 內容字串分割儲存
+        bodyStr = ""
+
+        urlList = []
 
         title = []
         url = []
         time = []
         img = []
-
 
         #遍歷HTML 先將 class top-news-list找出來
         for post in soup.find_all('section', "top-news-list"):
@@ -153,25 +214,43 @@ class News(Resource):
 
         for title, img, time, url in zip(title, img, time, url):
 
+            #如果資料庫有一樣名稱資料 返回true
             if NewsTtitleModel.find_by_name(title):
-                print('message "An item with name already exists.', title)
-            else:
+                print("message An item with name already exists.", title)
 
-                news = NewsTtitleModel(date=datetime.date.today(),
+                # # 將得到的網址./k10011772431000/k10011772431000.html 用/分成三等份 只取[1]
+                # rulId = url.split("/", 3)
+                # # 得到id 用於播放內容音效使用
+                # print("url===", "https://nhks-vh.akamaihd.net/i/news/easy/" + rulId[1] + ".mp4/master.m3u8")
+                #
+                # #頁面html
+                # urlList.append("https://www3.nhk.or.jp/news/easy"+url[1:])
+
+                # print(url)
+
+
+
+            else:
+                # #將資料寫入資料庫
+                newsTitle = NewsTtitleModel(date=datetime.date.today(),
                           title=title,
                           img=img,
                           time=time,
                           url=url)
                 try:
-                    news.save_to_db()
+                    newsTitle.save_to_db()
+                    #順便查內容
+                    urlList.append(url)
+
                 except:
                     return {"message": "An error occurred inserting the item."}, 500
 
-                print(news.json(), 201)
+        return urlList
 
 
-        driver.close()
-        return "ok"
+
+
+
 class Japanese:
     def is_japanese(string):
         for ch in string:
