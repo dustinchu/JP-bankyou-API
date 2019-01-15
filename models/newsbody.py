@@ -1,7 +1,7 @@
 from db import db
 
 
-class NewsBody(db.Model):
+class NewsBodyModel(db.Model):
     __tablename__ = 'NewsBody'
 
     id = db.Column(db.Integer, primary_key=True)

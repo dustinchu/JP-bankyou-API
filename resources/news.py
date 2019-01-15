@@ -5,7 +5,7 @@ import unicodedata
 import datetime
 import json
 from models.newstitle import NewsTtitleModel
-from models.newsbody import NewsBody
+from models.newsbody import NewsBodyModel
 
 
 
