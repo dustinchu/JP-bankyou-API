@@ -4,6 +4,6 @@ from models.newsbody import NewsBodyModel
 
 
 
-class NewsBody(Resource):
+class NewsBodyList(Resource):
     def get(self):
         return list(map(lambda x: x.json(), NewsBodyModel.query.all()))
