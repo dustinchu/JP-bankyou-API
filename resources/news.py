@@ -75,19 +75,21 @@ class News(Resource):
             print("內容===", bodyStr)
             driver.close()
 
+            if NewsBodyModel.find_by_name(pageUrl):
+                print("message An item with name already exists.", pageUrl)
 
+            else:
+                #將資料寫入資料庫 url ＝./XXX 沒分割過的  到時候內容用標題查得到url去串
+                newsBody = NewsBodyModel(date=datetime.date.today(),
+                          pageurl=pageUrl,
+                          body=bodyStr,
+                          playurl="https://nhks-vh.akamaihd.net/i/news/easy/" + rulId[0] + ".mp4/master.m3u8")
+                try:
+                    newsBody.save_to_db()
+                    # 順便查內容
 
-            #將資料寫入資料庫 url ＝./XXX 沒分割過的  到時候內容用標題查得到url去串
-            newsBody = NewsBodyModel(date=datetime.date.today(),
-                      pageurl=pageUrl[1:],
-                      body=bodyStr,
-                      playurl="https://nhks-vh.akamaihd.net/i/news/easy/" + rulId[0] + ".mp4/master.m3u8")
-            try:
-                newsBody.save_to_db()
-                # 順便查內容
-
-            except:
-                return {"message": "An error occurred inserting the newBody."}, 500
+                except:
+                    return {"message": "An error occurred inserting the newBody."}, 500
 
 
         return "ok"
