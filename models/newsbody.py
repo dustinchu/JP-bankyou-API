@@ -6,24 +6,24 @@ class NewsBodyModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date)
-    pageurl = db.Column(db.String(300))
+    url = db.Column(db.String(300))
     body = db.Column(db.String(500))
-    playurl = db.Column(db.String(100))
+    music = db.Column(db.String(100))
 
 
 
-    def __init__(self, date, pageurl, body, playurl):
+    def __init__(self, date, url, body, music):
         self.date = date
-        self.pageurl = pageurl
+        self.url = url
         self.body = body
-        self.playurl = playurl
+        self.music = music
 
     def json(self):
-        return {'pageurl': self.pageurl, 'body': self.body, 'playurl': self.playurl}
+        return {'url': self.url, 'body': self.body, 'music': self.music}
 
     @classmethod
-    def find_by_name(cls, pageurl):
-        return cls.query.filter_by(pageurl=pageurl).first()#return ItemModel object!
+    def find_by_name(cls, url):
+        return cls.query.filter_by(url=url).first()#return ItemModel object!
 
 
     def save_to_db(self):

@@ -14,18 +14,18 @@ class News(Resource):
     def get(self):
 
         # Ubuntu heroku使用
-        url = "https://www3.nhk.or.jp/news/easy/"
-        options = webdriver.ChromeOptions()
-        options.binary_location = '/app/.apt/usr/bin/google-chrome'
-        options.add_argument('--headless')
-        options.add_argument('--disable-gpu')
-        driver = webdriver.Chrome(chrome_options=options)
+        # url = "https://www3.nhk.or.jp/news/easy/"
+        # options = webdriver.ChromeOptions()
+        # options.binary_location = '/app/.apt/usr/bin/google-chrome'
+        # options.add_argument('--headless')
+        # options.add_argument('--disable-gpu')
+        # driver = webdriver.Chrome(chrome_options=options)
 
         #local
-        # url = "https://www3.nhk.or.jp/news/easy/"
-        # opt = webdriver.ChromeOptions()
-        # opt.set_headless()
-        # driver = webdriver.Chrome(options=opt)
+        url = "https://www3.nhk.or.jp/news/easy/"
+        opt = webdriver.ChromeOptions()
+        opt.set_headless()
+        driver = webdriver.Chrome(options=opt)
 
 
         driver.get(url)
@@ -81,12 +81,12 @@ class News(Resource):
             else:
                 #將資料寫入資料庫 url ＝./XXX 沒分割過的  到時候內容用標題查得到url去串
                 newsBody = NewsBodyModel(date=datetime.date.today(),
-                          pageurl=pageUrl,
-                          body=bodyStr,
-                          playurl="https://nhks-vh.akamaihd.net/i/news/easy/" + rulId[0] + ".mp4/master.m3u8")
+                                         url=pageUrl,
+                                         body=bodyStr,
+                                         music="https://nhks-vh.akamaihd.net/i/news/easy/" + rulId[0] +".mp4/master.m3u8")
                 try:
                     newsBody.save_to_db()
-                    # 順便查內容
+                    print("save ok")
 
                 except:
                     return {"message": "An error occurred inserting the newBody."}, 500
