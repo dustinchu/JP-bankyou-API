@@ -79,7 +79,7 @@ class News(Resource):
                 print("message An item with name already exists.", pageUrl)
 
             else:
-                #將資料寫入資料庫 url ＝./XXX 沒分割過的  到時候內容用標題查得到url去串
+                #將資料寫入資料庫 url ＝./XXX 沒分割過的, 到時候內容用標題查得到url去串
                 newsBody = NewsBodyModel(date=datetime.date.today(),
                                          url=pageUrl,
                                          body=bodyStr,
