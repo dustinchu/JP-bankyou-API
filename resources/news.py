@@ -28,11 +28,11 @@ class News(Resource):
         # driver = webdriver.Chrome(options=opt)
         #
         #
-        # driver.get(url)
-        # html = driver.page_source.encode('utf-8')
-        # soup = BeautifulSoup(html, "lxml")
+        driver.get(url)
+        html = driver.page_source.encode('utf-8')
+        soup = BeautifulSoup(html, "lxml")
         #
-        # url = GetHomePageData.getHomeHtml(soup)
+        url = GetHomePageData.getHomeHtml(soup)
 
 
 
@@ -73,7 +73,7 @@ class News(Resource):
                                     bodyStr += bodyText + " "
 
             print("內容===", bodyStr)
-            driver.close()
+
 
             if NewsBodyModel.find_by_name(pageUrl):
                 print("message An item with name already exists.", pageUrl)
@@ -91,7 +91,7 @@ class News(Resource):
                 except:
                     return {"message": "An error occurred inserting the newBody."}, 500
 
-
+        driver.close()
         return "ok"
 
 class GetHomePageData():
