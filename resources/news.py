@@ -74,9 +74,12 @@ class News(Resource):
 
             print("內容===", bodyStr)
             driver.close()
+
+
+
             #將資料寫入資料庫 url ＝./XXX 沒分割過的  到時候內容用標題查得到url去串
             newsBody = NewsBodyModel(date=datetime.date.today(),
-                      pageurl=pageUrl,
+                      pageurl=pageUrl[1:],
                       body=bodyStr,
                       playurl="https://nhks-vh.akamaihd.net/i/news/easy/" + rulId[0] + ".mp4/master.m3u8")
             try:
