@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="da93fc24c3uakc@ec2-23-21-171-25.compute-1.amazonaws.com" uuid="85df4410-f796-4d44-99fe-fd6d6f37f9c0">
-      <driver-ref>postgresql</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://ec2-23-21-171-25.compute-1.amazonaws.com:5432/da93fc24c3uakc</jdbc-url>
-      <driver-properties>
-        <property name="sslmode" value="require" />
-        <property name="sslfactory" value="org.postgresql.ssl.NonValidatingFactory" />
-      </driver-properties>
-    </data-source>
     <data-source source="LOCAL" name="data.db" uuid="fea05284-7ed7-47a9-992d-d21ed8f41e0c">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
@@ -18,6 +8,17 @@
       <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/data.db</jdbc-url>
       <driver-properties>
         <property name="enable_load_extension" value="true" />
+      </driver-properties>
+    </data-source>
+    <data-source source="LOCAL" name="da93fc24c3uakc@ec2-23-21-171-25.compute-1.amazonaws.com" uuid="870e047a-87db-40eb-ae11-7f9ecaebbd0a">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://ec2-23-21-171-25.compute-1.amazonaws.com:5432/da93fc24c3uakc</jdbc-url>
+      <driver-properties>
+        <property name="ssl" value="true" />
+        <property name="sslmode" value="require" />
+        <property name="sslfactory" value="org.postgresql.ssl.NonValidatingFactory" />
       </driver-properties>
     </data-source>
   </component>

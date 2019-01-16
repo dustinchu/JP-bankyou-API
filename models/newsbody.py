@@ -7,8 +7,8 @@ class NewsBodyModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date)
     pageurl = db.Column(db.String(300))
-    body = db.Column(db.String(200))
-    playurl = db.Column(db.String(50))
+    body = db.Column(db.String(500))
+    playurl = db.Column(db.String(100))
 
 
 
