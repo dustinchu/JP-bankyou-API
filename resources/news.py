@@ -14,25 +14,25 @@ class News(Resource):
     def get(self):
 
         # Ubuntu heroku使用
-        # url = "https://www3.nhk.or.jp/news/easy/"
-        # options = webdriver.ChromeOptions()
-        # options.binary_location = '/app/.apt/usr/bin/google-chrome'
-        # options.add_argument('--headless')
-        # options.add_argument('--disable-gpu')
-        # driver = webdriver.Chrome(chrome_options=options)
+        url = "https://www3.nhk.or.jp/news/easy/"
+        options = webdriver.ChromeOptions()
+        options.binary_location = '/app/.apt/usr/bin/google-chrome'
+        options.add_argument('--headless')
+        options.add_argument('--disable-gpu')
+        driver = webdriver.Chrome(chrome_options=options)
 
         #local
-        url = "https://www3.nhk.or.jp/news/easy/"
-        opt = webdriver.ChromeOptions()
-        opt.set_headless()
-        driver = webdriver.Chrome(options=opt)
-
-
-        driver.get(url)
-        html = driver.page_source.encode('utf-8')
-        soup = BeautifulSoup(html, "lxml")
-
-        url = GetHomePageData.getHomeHtml(soup)
+        # url = "https://www3.nhk.or.jp/news/easy/"
+        # opt = webdriver.ChromeOptions()
+        # opt.set_headless()
+        # driver = webdriver.Chrome(options=opt)
+        #
+        #
+        # driver.get(url)
+        # html = driver.page_source.encode('utf-8')
+        # soup = BeautifulSoup(html, "lxml")
+        #
+        # url = GetHomePageData.getHomeHtml(soup)
 
 
 
@@ -79,7 +79,7 @@ class News(Resource):
                 print("message An item with name already exists.", pageUrl)
 
             else:
-                #將資料寫入資料庫 url ＝./XXX 沒分割過的, 到時候內容用標題查得到url去串
+                #將資料寫入資料庫 url ＝./XXX 沒分割過的 到時候內容用標題查得到url去串
                 newsBody = NewsBodyModel(date=datetime.date.today(),
                                          url=pageUrl,
                                          body=bodyStr,
