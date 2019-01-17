@@ -22,7 +22,7 @@ class NewsTtitleModel(db.Model):
         self.playUrl = playUrl
 
     def json(self):
-        return {'title': self.title, 'img': self.img, 'time': self.time, 'url': self.url, 'playurl':self.playurl}
+        return {'title': self.title, 'img': self.img, 'time': self.time, 'url': self.url, 'playUrl': self.playUrl}
 
     @classmethod
     def find_by_name(cls, title):
