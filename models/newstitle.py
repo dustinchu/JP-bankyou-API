@@ -20,7 +20,7 @@ class NewsTtitleModel(db.Model):
         self.time = time
         self.url = url
         self.playUrl = playUrl
-
+    #
     def json(self):
         return {'title': self.title, 'img': self.img, 'time': self.time, 'url': self.url, 'playUrl': self.playUrl}
 
