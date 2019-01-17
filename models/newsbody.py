@@ -1,31 +1,42 @@
-from db import db
-
-
-class NewsBodyModel(db.Model):
-    __tablename__ = 'newsbody'
-
-    id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.Date)
-    url = db.Column(db.String(300))
-    body = db.Column(db.String(900))
-    music = db.Column(db.String(100))
+from bs4 import BeautifulSoup
+import requests
+from utf.jpUnicode import Japanese
 
 
 
-    def __init__(self, date, url, body, music):
-        self.date = date
-        self.url = url
-        self.body = body
-        self.music = music
+class NewsBodyPlayUrlModel():
+    def getPlayUrl(pageUrl):
+        r = requests.get("https://www3.nhk.or.jp/news/easy/"+pageUrl+"/"+pageUrl+".html")
+        if r.status_code != 200:
+            return {'message': 'Html get !=200 error '}, 404
+        r.encoding = 'utf-8'
+        # print(r.text)
+        soup = BeautifulSoup(r.text, "lxml")
+        # print(soup)
+        # 字串判斷使用
+        isJp = 0
+        # 寸內容
+        bodyStr = ""
 
-    def json(self):
-        return {'url': self.url, 'body': self.body, 'music': self.music}
+        for post in soup.find_all("article", "article-main"):
+            # print(post)
+            for body in post.find_all("div", "article-main__body article-body"):
+                for bodyText in body.strings:
+                    if bodyText != "\n":
+                        # 將字串分割
+                        if Japanese.is_japanese(bodyText):
+                            # 是漢字的話漢字後面加上&
+                            bodyStr += bodyText + "&"
+                            isJp = 1
+                        else:
+                            # 如果上一筆是漢字isJp=1  結束要加上空白
+                            if isJp == 1:
+                                isJp = 0
+                                bodyStr += bodyText + " "
+                            # 如果isJp=0 代表前面沒漢字　不需要加空白　不=0的話 代表前面有漢字 將is存成2
+                            else:
+                                bodyStr += bodyText + " "
 
-    @classmethod
-    def find_by_name(cls, url):
-        return cls.query.filter_by(url=url).first()#return ItemModel object!
 
+        return bodyStr
 
-    def save_to_db(self):
-        db.session.add(self)
-        db.session.commit()

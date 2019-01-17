@@ -12,7 +12,7 @@ from resources.describeItem import DescribeItem, DescribeItemList,DescribeItemId
 from resources.describe import Describe, DescribeList
 from resources.news import News
 from resources.newstitle import NewsTitleList
-from resources.newsbody import NewsBodyList
+from resources.newsbody import NewsBodyPlayUrl
 app = Flask(__name__)
 
 app.config['DEBUG'] = True
@@ -42,8 +42,8 @@ api.add_resource(DescribeItemIdList, '/describeItemIdList/<int:describes_id>')
 api.add_resource(UserRegister, '/register')
 
 api.add_resource(News, '/news')
-api.add_resource(NewsTitleList, '/newstitle')
-api.add_resource(NewsBodyList, '/newsbody')
+api.add_resource(NewsTitleList, '/newsTitle')
+api.add_resource(NewsBodyPlayUrl, '/newsBody/<string:pageUrl>')
 
 
 

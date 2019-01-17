@@ -9,3 +9,4 @@ BeautifulSoup4
 lxml
 selenium
 unicodedata2
+requests

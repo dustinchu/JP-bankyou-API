@@ -1,11 +1,12 @@
 from selenium import webdriver
 from flask_restful import Resource, reqparse
 from bs4 import BeautifulSoup
-import unicodedata
+
 import datetime
 import json
 from models.newstitle import NewsTtitleModel
-from models.newsbody import NewsBodyModel
+from models.newsbody import NewsBodyPlayUrlModel
+from utf.jpUnicode import Japanese
 
 
 class News(Resource):
@@ -13,18 +14,18 @@ class News(Resource):
 
     def get(self):
         # Ubuntu heroku使用
-        url = "https://www3.nhk.or.jp/news/easy/"
-        options = webdriver.ChromeOptions()
-        options.binary_location = '/app/.apt/usr/bin/google-chrome'
-        options.add_argument('--headless')
-        options.add_argument('--disable-gpu')
-        driver = webdriver.Chrome(chrome_options=options)
+        # url = "https://www3.nhk.or.jp/news/easy/"
+        # options = webdriver.ChromeOptions()
+        # options.binary_location = '/app/.apt/usr/bin/google-chrome'
+        # options.add_argument('--headless')
+        # options.add_argument('--disable-gpu')
+        # driver = webdriver.Chrome(chrome_options=options)
 
         # local
-        # url = "https://www3.nhk.or.jp/news/easy/"
-        # opt = webdriver.ChromeOptions()
-        # opt.set_headless()
-        # driver = webdriver.Chrome(options=opt)
+        url = "https://www3.nhk.or.jp/news/easy/"
+        opt = webdriver.ChromeOptions()
+        opt.set_headless()
+        driver = webdriver.Chrome(options=opt)
         #
         #
         driver.get(url)
@@ -97,7 +98,7 @@ class News(Resource):
                 for titleUrl in titleItem.find_all('a', href=True):
                     if titleUrl.text:
                         url.append(titleUrl['href'])
-                        # print("標題url==", titleUrl['href'])
+                        # print("標題url==", "https://www3.nhk.or.jp/news/easy"+titleUrl['href'][1:])
 
             title.append(titleStr)
 
@@ -167,104 +168,20 @@ class News(Resource):
 
                 # print(url)
 
-
-
             else:
                 # #將資料寫入資料庫
                 newsTitle = NewsTtitleModel(date=datetime.date.today(),
                           title=title,
                           img=img,
                           time=time,
-                          url=url)
+                          url=url[2:].split("/", 3)[0],
+                          playUrl="https://nhks-vh.akamaihd.net/i/news/easy/" + url[2:].split("/", 3)[0] + ".mp4/master.m3u8")
                 try:
                     newsTitle.save_to_db()
-                    #順便查內容
-                    urlList.append(url)
-
                 except:
                     return {"message": "An error occurred inserting the newsTitle."}, 500
         driver.close()
-        getNewsBody.is_NewsBody(urlList)
         return "ok"
 
 
 
-
-class getNewsBody:
-    def is_NewsBody(urlList):
-
-        for pageUrl in urlList:
-
-            # Ubuntu heroku使用
-            url = "https://www3.nhk.or.jp/news/easy/"
-            options = webdriver.ChromeOptions()
-            options.binary_location = '/app/.apt/usr/bin/google-chrome'
-            options.add_argument('--headless')
-            options.add_argument('--disable-gpu')
-            driver = webdriver.Chrome(chrome_options=options)
-
-            # local
-            # opt = webdriver.ChromeOptions()
-            # opt.set_headless()
-            # driver = webdriver.Chrome(options=opt)
-            #
-            #
-            driver.get("https://www3.nhk.or.jp/news/easy" + pageUrl[1:])
-            html = driver.page_source.encode('utf-8')
-            soup = BeautifulSoup(html, "lxml")
-
-
-            print("pageUrl", "https://www3.nhk.or.jp/news/easy"+pageUrl[1:])
-            rulId = pageUrl[2:].split("/", 3)
-            print("urlID==", "https://nhks-vh.akamaihd.net/i/news/easy/" + rulId[0] + ".mp4/master.m3u8")
-            #字串判斷使用
-            isJp = 0
-            #寸內容
-            bodyStr = ""
-
-            for post in soup.find_all("article", "article-main"):
-                # print(post)
-                for body in post.find_all("div", "article-main__body article-body"):
-                    for bodyText in body.strings:
-                        if bodyText !="\n":
-                            # 將字串分割
-                            if Japanese.is_japanese(bodyText):
-                                # 是漢字的話漢字後面加上&
-                                bodyStr += bodyText + "&"
-                                isJp = 1
-                            else:
-                                # 如果上一筆是漢字isJp=1  結束要加上空白
-                                if isJp == 1:
-                                    isJp = 0
-                                    bodyStr += bodyText + " "
-                                # 如果isJp=0 代表前面沒漢字　不需要加空白　不=0的話 代表前面有漢字 將is存成2
-                                else:
-                                    bodyStr += bodyText + " "
-
-            print("內容===", bodyStr)
-            driver.close()
-
-            if NewsBodyModel.find_by_name(pageUrl):
-                print("message An item with name already exists.", pageUrl)
-
-            else:
-                #將資料寫入資料庫 url ＝./XXX 沒分割過的 到時候內容用標題查得到url去串
-                newsBody = NewsBodyModel(date=datetime.date.today(),
-                                         url=pageUrl,
-                                         body=bodyStr,
-                                         music="https://nhks-vh.akamaihd.net/i/news/easy/" + rulId[0] +".mp4/master.m3u8")
-                try:
-                    newsBody.save_to_db()
-                    print("save ok")
-
-                except:
-                    return {"message": "An error occurred inserting the newBody."}, 500
-
-
-class Japanese:
-    def is_japanese(string):
-        for ch in string:
-            name = unicodedata.name(ch)
-            if "CJK UNIFIED" in name:
-                return True
-            return False

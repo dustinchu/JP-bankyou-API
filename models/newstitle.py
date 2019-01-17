@@ -10,18 +10,19 @@ class NewsTtitleModel(db.Model):
     img = db.Column(db.String(200))
     time = db.Column(db.String(50))
     url = db.Column(db.String(100))
+    playUrl = db.Column(db.String(100))
 
 
-
-    def __init__(self, date, title, img, time, url):
+    def __init__(self, date, title, img, time, url, playUrl):
         self.date = date
         self.title = title
         self.img = img
         self.time = time
         self.url = url
+        self.playUrl = playUrl
 
     def json(self):
-        return {'title': self.title, 'img': self.img, 'time': self.time, 'url': self.url}
+        return {'title': self.title, 'img': self.img, 'time': self.time, 'url': self.url, 'playurl':self.playurl}
 
     @classmethod
     def find_by_name(cls, title):
