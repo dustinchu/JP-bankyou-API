@@ -45,14 +45,13 @@ class DescribeItem(Resource):
         return {'message': 'DescribeItem not found'}, 404
 
     def post(self, name):
-        print(name)
         if DescribeItemModel.find_by_name(name):
             return {'message': "An item with name '{}' already exists.".format(name)}, 400
 
         data = DescribeItem.parser.parse_args()
 
         item = DescribeItemModel(name, **data)
-
+        print(item.json())
         try:
             item.save_to_db()
         except:
