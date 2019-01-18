@@ -31,7 +31,7 @@ class DescribeItemModel(db.Model):
                 'body': self.body, 'describes_id': self.describes_id}
 
     @classmethod
-    def find_by_name(cls, describes_id):
+    def find_by_name(cls, name):
         """
         cls.query.filter_by(name=name).first()
         select * from __tablename__ where name=name LIMIT 1
@@ -43,7 +43,7 @@ class DescribeItemModel(db.Model):
 
 
         """
-        return cls.query.filter_by(describes_id=describes_id).first()#return ItemModel object!
+        return cls.query.filter_by(name=name).first()#return ItemModel object!
 
     @classmethod
     def find_by_id(cls, describes_id):

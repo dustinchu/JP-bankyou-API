@@ -39,12 +39,13 @@ class DescribeItem(Resource):
     # 先把jwt認證關了
     # @jwt_required()
     def get(self, describes_id):
-        item = DescribeItemModel.find_by_name(describes_id)
+        item = DescribeItemModel.find_by_id(describes_id)
         if item:
             return item.json()
-        return {'message': 'Item not found'}, 404
+        return {'message': 'DescribeItem not found'}, 404
 
     def post(self, name):
+        print(name)
         if DescribeItemModel.find_by_name(name):
             return {'message': "An item with name '{}' already exists.".format(name)}, 400
 
@@ -55,7 +56,7 @@ class DescribeItem(Resource):
         try:
             item.save_to_db()
         except:
-            return {"message": "An error occurred inserting the item."}, 500
+            return {"message": "An error occurred inserting the DescribeItem."}, 500
 
         return item.json(), 201
 
@@ -63,8 +64,8 @@ class DescribeItem(Resource):
         item = DescribeItemModel.find_by_name(name)
         if item:
             item.delete_from_db()
-            return {'message': 'Item deleted.'}
-        return {'message': 'Item not found.'}, 404
+            return {'message': 'DescribeItem deleted.'}
+        return {'message': 'DescribeItem not found.'}, 404
 
     def put(self, name):
         data = DescribeItem.parser.parse_args()
@@ -83,7 +84,7 @@ class DescribeItem(Resource):
 
 class DescribeItemList(Resource):
     def get(self):
-        return {'items': list(map(lambda x: x.json(), DescribeItemModel.query.all()))}
+        return {'DescribeItem': list(map(lambda x: x.json(), DescribeItemModel.query.all()))}
 
 class DescribeItemIdList(Resource):
 
