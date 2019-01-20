@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 from utf.jpUnicode import Japanese
+import json
 
 
 
@@ -37,6 +38,5 @@ class NewsBodyPlayUrlModel():
                             else:
                                 bodyStr += bodyText + " "
 
-
-        return bodyStr
+        return {'bodyText': bodyStr}
 
