@@ -14,18 +14,18 @@ class News(Resource):
 
     def get(self):
         # Ubuntu heroku使用
-        url = "https://www3.nhk.or.jp/news/easy/"
-        options = webdriver.ChromeOptions()
-        options.binary_location = '/app/.apt/usr/bin/google-chrome'
-        options.add_argument('--headless')
-        options.add_argument('--disable-gpu')
-        driver = webdriver.Chrome(chrome_options=options)
+        # url = "https://www3.nhk.or.jp/news/easy/"
+        # options = webdriver.ChromeOptions()
+        # options.binary_location = '/app/.apt/usr/bin/google-chrome'
+        # options.add_argument('--headless')
+        # options.add_argument('--disable-gpu')
+        # driver = webdriver.Chrome(chrome_options=options)
 
         # local
-        # url = "https://www3.nhk.or.jp/news/easy/"
-        # opt = webdriver.ChromeOptions()
-        # opt.set_headless()
-        # driver = webdriver.Chrome(options=opt)
+        url = "https://www3.nhk.or.jp/news/easy/"
+        opt = webdriver.ChromeOptions()
+        opt.set_headless()
+        driver = webdriver.Chrome(options=opt)
         #
         #
         driver.get(url)
@@ -63,6 +63,7 @@ class News(Resource):
                     '''
                     if titleImg.img:
                         print("標題圖片==", titleImg.img['src'])
+
                         img.append(titleImg.img['src'])
 
 
@@ -169,6 +170,11 @@ class News(Resource):
                 # print(url)
 
             else:
+                #有圖片網址會不一樣 只有./URL 他存放的路徑不同 寫入的時候判斷一下
+                if img[0] == ".":
+                    img = "https://www3.nhk.or.jp/news/easy/"+img[1:]
+                    print(img)
+
                 # #將資料寫入資料庫
                 newsTitle = NewsTtitleModel(date=datetime.date.today(),
                           title=title,
