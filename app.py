@@ -46,7 +46,7 @@ api.add_resource(News, '/news')
 api.add_resource(NewsTitleList, '/newsTitle')
 api.add_resource(NewsBodyPlayUrl, '/newsBody/<string:pageUrl>')
 
-api.add_resource(Translator, '/translator/<string:traText>')
+# api.add_resource(Translator, '/translator/<string:traText>')
 
 
 if __name__ == '__main__':
