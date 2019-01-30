@@ -1,21 +1,36 @@
 from apscheduler.schedulers.blocking import BlockingScheduler
 from selenium import webdriver
 from bs4 import BeautifulSoup
-from models.newstitle import NewsModel
-import unicodedata
+
 import datetime
+import json
+from models.newstitle import NewsTtitleModel
+from utf.jpUnicode import Japanese
 
 sched = BlockingScheduler()
 
 @sched.scheduled_job('interval', minutes=59)
 def timed_job():
+    playUrl = []
+    # Ubuntu heroku使用
+    # url = "https://www3.nhk.or.jp/news/easy/"
+    # options = webdriver.ChromeOptions()
+    # options.binary_location = '/app/.apt/usr/bin/google-chrome'
+    # options.add_argument('--headless')
+    # options.add_argument('--disable-gpu')
+    # driver = webdriver.Chrome(chrome_options=options)
+
+    # local
     url = "https://www3.nhk.or.jp/news/easy/"
     opt = webdriver.ChromeOptions()
     opt.set_headless()
     driver = webdriver.Chrome(options=opt)
+    #
+    #
     driver.get(url)
     html = driver.page_source.encode('utf-8')
     soup = BeautifulSoup(html, "lxml")
+
     # 用來判斷漢字 與漢字片假名使用
     isJp = 0
     # 標題字串分隔儲存
@@ -23,7 +38,7 @@ def timed_job():
     # 內容字串分割儲存
     bodyStr = ""
 
-    newsJson = []
+    urlList = []
 
     title = []
     url = []
@@ -46,6 +61,7 @@ def timed_job():
                 '''
                 if titleImg.img:
                     print("標題圖片==", titleImg.img['src'])
+
                     img.append(titleImg.img['src'])
 
             # 標題內容
@@ -80,7 +96,7 @@ def timed_job():
             for titleUrl in titleItem.find_all('a', href=True):
                 if titleUrl.text:
                     url.append(titleUrl['href'])
-                    # print("標題url==", titleUrl['href'])
+                    # print("標題url==", "https://www3.nhk.or.jp/news/easy"+titleUrl['href'][1:])
 
         title.append(titleStr)
 
@@ -135,31 +151,39 @@ def timed_job():
 
     for title, img, time, url in zip(title, img, time, url):
 
-        if NewsModel.find_by_name(title):
-            print('message "An item with name already exists.', title)
+        # 如果資料庫有一樣名稱資料 返回true
+        if NewsTtitleModel.find_by_name(title):
+            print("message An item with name already exists.", title)
+
+            # # 將得到的網址./k10011772431000/k10011772431000.html 用/分成三等份 只取[1]
+            # rulId = url.split("/", 3)
+            # # 得到id 用於播放內容音效使用
+            # print("url===", "https://nhks-vh.akamaihd.net/i/news/easy/" + rulId[1] + ".mp4/master.m3u8")
+            #
+            # #頁面html
+            # urlList.append("https://www3.nhk.or.jp/news/easy"+url[1:])
+
+            # print(url)
+
         else:
+            # 有圖片網址會不一樣 只有./URL 他存放的路徑不同 寫入的時候判斷一下
+            if img[0] == ".":
+                img = "https://www3.nhk.or.jp/news/easy/" + img[1:]
+                print(img)
 
-            news = NewsModel(date=datetime.date.today(),
-                             title=title,
-                             img=img,
-                             time=time,
-                             url=url)
+            # #將資料寫入資料庫
+            newsTitle = NewsTtitleModel(date=datetime.date.today(),
+                                        title=title,
+                                        img=img,
+                                        time=time,
+                                        url=url[2:].split("/", 3)[0],
+                                        playUrl="https://nhks-vh.akamaihd.net/i/news/easy/" + url[2:].split("/", 3)[
+                                            0] + ".mp4/master.m3u8")
             try:
-                news.save_to_db()
+                newsTitle.save_to_db()
             except:
-                return {"message": "An error occurred inserting the item."}, 500
-
-            print(news.json(), 201)
-
+                return {"message": "An error occurred inserting the newsTitle."}, 500
     driver.close()
-
-class Japanese:
-    def is_japanese(string):
-        for ch in string:
-            name = unicodedata.name(ch)
-            if "CJK UNIFIED" in name:
-                return True
-            return False
 
 
 sched.start()

@@ -13,6 +13,7 @@ from resources.describe import Describe, DescribeList
 from resources.news import News
 from resources.newstitle import NewsTitleList
 from resources.newsbody import NewsBodyPlayUrl
+from resources.translator import Translator
 app = Flask(__name__)
 
 app.config['DEBUG'] = True
@@ -45,6 +46,7 @@ api.add_resource(News, '/news')
 api.add_resource(NewsTitleList, '/newsTitle')
 api.add_resource(NewsBodyPlayUrl, '/newsBody/<string:pageUrl>')
 
+api.add_resource(Translator, '/translator/<string:traText>')
 
 
 if __name__ == '__main__':
