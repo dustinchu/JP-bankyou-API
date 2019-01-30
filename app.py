@@ -13,7 +13,6 @@ from resources.describe import Describe, DescribeList
 from resources.news import News
 from resources.newstitle import NewsTitleList
 from resources.newsbody import NewsBodyPlayUrl
-from resources.translator import Translator
 app = Flask(__name__)
 
 app.config['DEBUG'] = True
