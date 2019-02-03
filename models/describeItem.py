@@ -5,12 +5,12 @@ class DescribeItemModel(db.Model):
     __tablename__ = 'DescribeItems'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80))
-    titleName = db.Column(db.String(80))
-    titleBody = db.Column(db.String(80))
-    body = db.Column(db.String(200))
-    exampleTitle = db.Column(db.String(80))
-    exampleBody = db.Column(db.String(80))
+    name = db.Column(db.String(100))
+    titleName = db.Column(db.String(150))
+    titleBody = db.Column(db.String(150))
+    body = db.Column(db.String(300))
+    exampleTitle = db.Column(db.String(200))
+    exampleBody = db.Column(db.String(200))
 
     describes_id = db.Column(db.Integer, db.ForeignKey('describes.id'))
     describe = db.relationship('DescribeModel')
