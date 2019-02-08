@@ -8,9 +8,9 @@ class DescribeItemModel(db.Model):
     name = db.Column(db.String(100))
     titleName = db.Column(db.String(150))
     titleBody = db.Column(db.String(150))
-    body = db.Column(db.String(300))
-    exampleTitle = db.Column(db.String(200))
-    exampleBody = db.Column(db.String(200))
+    body = db.Column(db.String(400))
+    exampleTitle = db.Column(db.String(400))
+    exampleBody = db.Column(db.String(400))
 
     describes_id = db.Column(db.Integer, db.ForeignKey('describes.id'))
     describe = db.relationship('DescribeModel')
