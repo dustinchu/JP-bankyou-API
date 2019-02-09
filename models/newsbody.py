@@ -7,6 +7,7 @@ import json
 
 class NewsBodyPlayUrlModel():
     def getPlayUrl(pageUrl):
+        print('url=='+"https://www3.nhk.or.jp/news/easy/"+pageUrl+"/"+pageUrl+".html")
         r = requests.get("https://www3.nhk.or.jp/news/easy/"+pageUrl+"/"+pageUrl+".html")
         if r.status_code != 200:
             return {'message': 'Html get !=200 error '}, 404
