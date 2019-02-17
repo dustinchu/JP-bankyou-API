@@ -10,7 +10,7 @@ class DescribeItemModel(db.Model):
     titleBody = db.Column(db.String(150))
     body = db.Column(db.String(400))
     exampleTitle = db.Column(db.String(600))
-    exampleBody = db.Column(db.String(650))
+    exampleBody = db.Column(db.String(900))
 
     describes_id = db.Column(db.Integer, db.ForeignKey('describes.id'))
     describe = db.relationship('DescribeModel')
