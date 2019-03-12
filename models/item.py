@@ -5,22 +5,31 @@ class ItemModel(db.Model):
     __tablename__ = 'items'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80))
+
+    title = db.Column(db.String(80))
+    type = db.Column(db.String(20))
     body = db.Column(db.String(80))
+    exampleTitle = db.Column(db.String(150))
+    exampleBody = db.Column(db.String(150))
 
     homes_id = db.Column(db.Integer, db.ForeignKey('homes.id'))
     home = db.relationship('HomeModel')
 
-    def __init__(self, name,  body, homes_id):
-        self.name = name
+    def __init__(self, title,  type, body, exampleTitle, exampleBody, homes_id):
+        self.title = title
+        self.type = type
         self.body = body
+        self.exampleTitle = exampleTitle
+        self.exampleBody = exampleBody
         self.homes_id = homes_id
 
+
     def json(self):
-        return {'name': self.name, 'body': self.body, 'home_id': self.homes_id}
+        return {'title': self.title, 'type': self.type, 'body': self.body,
+                'exampleTitle': self.exampleTitle, 'exampleBody': self.exampleBody, 'homes_id': self.homes_id}
 
     @classmethod
-    def find_by_name(cls, name):
+    def find_by_name(cls, title):
         """
         cls.query.filter_by(name=name).first()
         select * from __tablename__ where name=name LIMIT 1
@@ -32,7 +41,7 @@ class ItemModel(db.Model):
 
 
         """
-        return cls.query.filter_by(name=name).first()#return ItemModel object!
+        return cls.query.filter_by(title=title).first()#return ItemModel object!
 
     @classmethod
     def find_by_id(cls, homes_id):

@@ -5,16 +5,37 @@ from models.item import ItemModel
 
 class Item(Resource):
     parser = reqparse.RequestParser()
+    parser.add_argument('title',
+                        type=str,
+                        required=True,
+                        help="Every item needs a title."
+                        )
+    parser.add_argument('type',
+                        type=str,
+                        required=True,
+                        help="Every item needs a type."
+                        )
     parser.add_argument('body',
                         type=str,
                         required=True,
-                        help="This field cannot be left blank!"
+                        help="Every item needs a body."
+                        )
+    parser.add_argument('exampleTitle',
+                        type=str,
+                        required=True,
+                        help="Every item needs a exampleTitle."
+                        )
+    parser.add_argument('exampleBody',
+                        type=str,
+                        required=True,
+                        help="Every item needs a exampleBody."
                         )
     parser.add_argument('homes_id',
                         type=int,
                         required=True,
                         help="Every item needs a homes_id."
                         )
+
     # 先把jwt認證關了
     # @jwt_required()
     def get(self, name):
@@ -23,13 +44,13 @@ class Item(Resource):
             return item.json()
         return {'message': 'Item not found'}, 404
 
-    def post(self, name):
-        if ItemModel.find_by_name(name):
-            return {'message': "An item with name '{}' already exists.".format(name)}, 400
+    def post(self, title):
+        if ItemModel.find_by_name(title):
+            return {'message': "An item with name '{}' already exists.".format(title)}, 400
 
         data = Item.parser.parse_args()
 
-        item = ItemModel(name, **data)
+        item = ItemModel(title, **data)
 
         try:
             item.save_to_db()
