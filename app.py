@@ -27,7 +27,7 @@ jwt = JWT(app, authenticate, identity)  # /auth
 api.add_resource(Home, '/home/<string:name>')
 api.add_resource(HomeList, '/homes')
 
-api.add_resource(Item, '/item/<string:name>')
+api.add_resource(Item, '/item/<string:title>')
 api.add_resource(ItemList, '/items')
 api.add_resource(ItemIdList, '/id_items/<int:homes_id>')
 

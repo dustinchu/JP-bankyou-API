@@ -5,11 +5,6 @@ from models.item import ItemModel
 
 class Item(Resource):
     parser = reqparse.RequestParser()
-    parser.add_argument('title',
-                        type=str,
-                        required=True,
-                        help="Every item needs a title."
-                        )
     parser.add_argument('type',
                         type=str,
                         required=True,
@@ -45,13 +40,13 @@ class Item(Resource):
         return {'message': 'Item not found'}, 404
 
     def post(self, title):
+
         if ItemModel.find_by_name(title):
-            return {'message': "An item with name '{}' already exists.".format(title)}, 400
+            return {'message': "An item with title '{}' already exists.".format(title)}, 400
 
         data = Item.parser.parse_args()
 
         item = ItemModel(title, **data)
-
         try:
             item.save_to_db()
         except:

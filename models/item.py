@@ -25,8 +25,7 @@ class ItemModel(db.Model):
 
 
     def json(self):
-        return {'title': self.title, 'type': self.type, 'body': self.body,
-                'exampleTitle': self.exampleTitle, 'exampleBody': self.exampleBody, 'homes_id': self.homes_id}
+        return {'title': self.title, 'type': self.type, 'body': self.body, 'exampleTitle': self.exampleTitle, 'exampleBody': self.exampleBody, 'homes_id': self.homes_id}
 
     @classmethod
     def find_by_name(cls, title):
