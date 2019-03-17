@@ -33,8 +33,8 @@ class Item(Resource):
 
     # 先把jwt認證關了
     # @jwt_required()
-    def get(self, name):
-        item = ItemModel.find_by_name(name)
+    def get(self, title):
+        item = ItemModel.find_by_name(title)
         if item:
             return item.json()
         return {'message': 'Item not found'}, 404
