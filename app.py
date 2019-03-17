@@ -13,6 +13,9 @@ from resources.describe import Describe, DescribeList
 from resources.news import News
 from resources.newstitle import NewsTitleList
 from resources.newsbody import NewsBodyPlayUrl
+from resources.exercise import Exercise, ExerciseList
+
+
 app = Flask(__name__)
 
 app.config['DEBUG'] = True
@@ -34,7 +37,6 @@ api.add_resource(ItemIdList, '/id_items/<int:homes_id>')
 api.add_resource(Describe, '/describe/<string:name>')
 api.add_resource(DescribeList, '/describes')
 
-
 api.add_resource(DescribeItem, '/describeItem/<string:name>')
 api.add_resource(DescribeItemList, '/describeItems')
 api.add_resource(DescribeItemIdList, '/describeItemIdList/<int:describes_id>')
@@ -45,7 +47,11 @@ api.add_resource(News, '/news')
 api.add_resource(NewsTitleList, '/newsTitle')
 api.add_resource(NewsBodyPlayUrl, '/newsBody/<string:pageUrl>')
 
+api.add_resource(Exercise, '/exercise/<string:name>')
+api.add_resource(ExerciseList, '/exercise')
+
 # api.add_resource(Translator, '/translator/<string:traText>')
+
 
 
 if __name__ == '__main__':
