@@ -8,13 +8,13 @@ from security import authenticate, identity
 from resources.user import UserRegister
 from resources.item import Item, ItemList,ItemIdList
 from resources.home import Home, HomeList
-from resources.describeItem import DescribeItem, DescribeItemList,DescribeItemIdList
+from resources.describeItem import DescribeItem, DescribeItemList, DescribeItemIdList
 from resources.describe import Describe, DescribeList
 from resources.news import News
 from resources.newstitle import NewsTitleList
 from resources.newsbody import NewsBodyPlayUrl
 from resources.exercise import Exercise, ExerciseList
-
+from resources.exerciseItem import ExerciseItem, ExerciseItemList, ExerciseItemIdList
 
 app = Flask(__name__)
 
@@ -47,8 +47,12 @@ api.add_resource(News, '/news')
 api.add_resource(NewsTitleList, '/newsTitle')
 api.add_resource(NewsBodyPlayUrl, '/newsBody/<string:pageUrl>')
 
-api.add_resource(Exercise, '/exercise/<string:name>')
-api.add_resource(ExerciseList, '/exercise')
+api.add_resource(Exercise, '/exercise/<string:topic>')
+api.add_resource(ExerciseList, '/exercises')
+
+api.add_resource(ExerciseItem, '/exerciseItem/<string:topic>')
+api.add_resource(ExerciseItemList, '/exerciseItems')
+api.add_resource(ExerciseItemIdList, '/exerciseItemIdList/<int:exercises_id>')
 
 # api.add_resource(Translator, '/translator/<string:traText>')
 

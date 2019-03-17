@@ -6,18 +6,18 @@ class Exercise(Resource):
     parser = reqparse.RequestParser()
 
 
-    def get(self, name):
-        exercise = ExerciseModel.find_by_name(name)
+    def get(self, topic):
+        exercise = ExerciseModel.find_by_name(topic)
         if exercise:
             return exercise.json()
         return {'message': 'exercise not found'}, 404
 
-    def post(self, name):
-        if ExerciseModel.find_by_name(name):
-            return {'message': "A exercise with name '{}' already exists.".format(name)}, 400
+    def post(self, topic):
+        print(topic)
+        if ExerciseModel.find_by_name(topic):
+            return {'message': "A exercise with name '{}' already exists.".format(topic)}, 400
 
-        # home = HomeModel(name, data['body'])
-        exercise = ExerciseModel(name)
+        exercise = ExerciseModel(topic)
         try:
             exercise.save_to_db()
         except:
@@ -25,8 +25,8 @@ class Exercise(Resource):
 
         return exercise.json(), 201
 
-    def delete(self, name):
-        name = ExerciseModel.find_by_name(name)
+    def delete(self, topic):
+        name = ExerciseModel.find_by_name(topic)
         if name:
             name.delete_from_db()
 

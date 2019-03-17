@@ -5,20 +5,20 @@ class ExerciseModel(db.Model):
     __tablename__ = 'exercise'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80))
+    topic = db.Column(db.String(80))
     items = db.relationship('ExerciseItemModel', lazy='dynamic')
 
-    def __init__(self, name):
-        self.name = name
+    def __init__(self, topic):
+        self.topic = topic
         # self.body = body
 
     def json(self):
         # return {'name': self.name, 'items': [item.json() for item in self.items.all()]}
-        return {'id': self.id, 'name': self.name}
+        return {'id': self.id, 'topic': self.topic}
 
     @classmethod
-    def find_by_name(cls, name):
-        return cls.query.filter_by(name=name).first()
+    def find_by_name(cls, topic):
+        return cls.query.filter_by(topic=topic).first()
 
     def save_to_db(self):
         db.session.add(self)
