@@ -36,7 +36,7 @@ class ExerciseItem(Resource):
         data = ExerciseItem.parser.parse_args()
 
         item = ExerciseItemModel(topic, **data)
-        print(item.json())
+        # print(item.json())
         try:
             item.save_to_db()
         except:

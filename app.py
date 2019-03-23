@@ -15,6 +15,8 @@ from resources.newstitle import NewsTitleList
 from resources.newsbody import NewsBodyPlayUrl
 from resources.exercise import Exercise, ExerciseList
 from resources.exerciseItem import ExerciseItem, ExerciseItemList, ExerciseItemIdList
+from resources.url import Url,UrlList
+
 
 app = Flask(__name__)
 
@@ -54,6 +56,8 @@ api.add_resource(ExerciseItem, '/exerciseItem/<string:topic>')
 api.add_resource(ExerciseItemList, '/exerciseItems')
 api.add_resource(ExerciseItemIdList, '/exerciseItemIdList/<int:exercises_id>')
 
+api.add_resource(Url, '/url/<string:ver>')
+api.add_resource(UrlList, '/urlList')
 # api.add_resource(Translator, '/translator/<string:traText>')
 
 
