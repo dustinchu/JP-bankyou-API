@@ -30,6 +30,7 @@ class ExerciseItem(Resource):
         return {'message': 'ExerciseItem not found'}, 404
 
     def post(self, topic):
+        print(topic)
         if ExerciseItemModel.find_by_name(topic):
             return {'message': "An item with topic '{}' already exists.".format(topic)}, 400
 
